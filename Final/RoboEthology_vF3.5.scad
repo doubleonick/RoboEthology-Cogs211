@@ -621,7 +621,7 @@ module battery_mount_v2(){
     
         
 }
-battery_mount_v3();
+
 module battery_mount_v3(){
     clip_w = battery_w  - cube_allowance;
     //translate([0, 0, -(peg_h/2 + battery_h/2 + cube_allowance)])
@@ -1366,28 +1366,30 @@ module ez_bot_adapter(){
 
 
 //BumperExtension... Full
+
+module bumpers_extended()
+{
+    translate([0, -bumper_r * 0.25 + peg_h * 1 + cube_allowance * 1.25, -bumper_h * 0.5 - peg_r - cube_allowance * 2])
+    difference(){
+        bumper_extension1();
+        translate([0, peg_h * 1.5, 0])
+        bumper_extension2();
+        translate([0, -bumper_r * 1, 0])
+        cube_base(bumper_r * 2.5, bumper_r * 2.5, bumper_h * 2);
+    }
+    rotate([0, 0, 180])
+    difference(){
+        translate([0, 0, -(battery_h/2 + cube_allowance + peg_h/2)])
+        bumpers();
+        translate([0, 40 + 9, -(battery_h/2 + cube_allowance + peg_h/2) + 5])
+        cube_base(172, 140, peg_h + bumper_h + link_t);
+    }
+}
+
 /*
-translate([0, -bumper_r * 0.25 + peg_h * 1 + cube_allowance * 1.25, -bumper_h * 0.5 - peg_r - cube_allowance * 2])
+bumper_servo_power_base();
+translate([0, 0, peg_h * 3])
 difference(){
-    bumper_extension1();
-    translate([0, peg_h * 1.5, 0])
-    bumper_extension2();
-    translate([0, -bumper_r * 1, 0])
-    cube_base(bumper_r * 2.5, bumper_r * 2.5, bumper_h * 2);
-}
-rotate([0, 0, 180])
-difference(){
-    translate([0, 0, -(battery_h/2 + cube_allowance + peg_h/2)])
-    bumpers();
-    translate([0, 40 + 9, -(battery_h/2 + cube_allowance + peg_h/2) + 5])
-    cube_base(172, 140, peg_h + bumper_h + link_t);
-}
-*/
-
-
-//bumper_servo_power_base();
-//translate([0, 0, peg_h * 3])
-/*difference(){
     sensor_mount_deck();
     translate([peg_h * 1.5, link_w * 0.5 + peg_h, -8 - 7])
     cube_base(14, peg_h * 3, 14);
@@ -1453,26 +1455,37 @@ difference(){
 //IRCap();
 //mount_IR();
 //LDRMount();
-/*
-translate([battery_w/2 + peg_h * 2.65, -(battery_l/2 - peg_h * 2.75), 0])
-rotate([0, 0, 90])
-standoff();
-translate([-(battery_w/2 + peg_h * 2.65), -(battery_l/2 - peg_h * 2.75), 0])
-rotate([0, 0, -90])
-standoff();
 
-translate([battery_w/2 + peg_h * 2.125, (battery_l/2 - peg_h * 1.75), peg_h * 1.125])
-rotate([180, 0, 180])
-zig_standoff();
-translate([-(battery_w/2 + peg_h * 2.125), (battery_l/2 - peg_h * 1.75), peg_h * 1.125])
-rotate([180, 0, 0])
-zig_standoff();
+//NBL 15 June 2020: bumpers
+//translate([0, bsp_r * 0.5 - peg_h *2, 0])
+//bumpers_extended();
+//mirror([0, 1, 0])
+//{
+//    translate([0, bsp_r * 0.5 - peg_h *2, 0])
+//    bumpers_extended();
+//}
 
-translate([0, (link_diagonal/2 - caster_w/2 - peg_r/2), -bumper_h+peg_h/2])
-caster();
-translate([0, -(link_diagonal/2 - caster_w/2 - peg_r/2), -bumper_h+peg_h/2])
-caster();
-*/
+////NBL 15 June 2020: Standoffs and Casters
+//translate([battery_w/2 + peg_h * 1.65, -(battery_l/2 - peg_h * 2.75), peg_h * 2])
+//rotate([0, 0, 90])
+//standoff();
+////translate([-(battery_w/2 + peg_h * 2.65), -(battery_l/2 - peg_h * 2.75), 0])
+//translate([-(battery_w/2 + peg_h * 1.65), -(battery_l/2 - peg_h * 2.75), peg_h * 2])
+//rotate([0, 0, -90])
+//standoff();
+//
+//translate([battery_w/2 + peg_h * 2.125, (battery_l/2 - peg_h * 1.75), peg_h * 4])
+//rotate([180, 0, 180])
+//zig_standoff();
+//translate([-(battery_w/2 + peg_h * 2.125), (battery_l/2 - peg_h * 1.75), peg_h * 4])
+//rotate([180, 0, 0])
+//zig_standoff();
+//
+//translate([0, (link_diagonal/2 - caster_w/2 - peg_r/2), -bumper_h+peg_h/2])
+//caster();
+//translate([0, -(link_diagonal/2 - caster_w/2 - peg_r/2), -bumper_h+peg_h/2])
+//caster();
+
 /*
 difference(){
     translate([0, 0, -(battery_h/2 + cube_allowance + peg_h/2)])
@@ -1490,8 +1503,76 @@ difference(){
 //cylinder_base(bar_r, bar_l, roundness);
 //translate([0, 0, -(bar_l + bearing_r + peg_h/2)])
 //          sensor_deck_lock();
-//translate([0, 0, parallax_wing_w * 0.75 + link_t + peg_h/2])
+
+//battery_mount_v3();
+
+////NBL: IS THIS WHAT INTERFACES TO THE STANDOFFS?  I DON"T REMEMBER NOW!
+////translate([0, 0, parallax_wing_w * 0.75 + link_t + peg_h/2])
+//translate([0, 0, peg_h * 6])
 //controller_housing();
+
+module lock_cover()
+{
+    difference()
+    {
+        translate([0, 0, peg_h - link_t * 0.5])
+        cylinder_base(peg_r * 2 + link_t + 4, peg_h * 3, roundness);
+        scale([1+rad_allowance/1, 1+rad_allowance/1, 1+rad_allowance/1])
+        controller_housing_lock();
+    }
+}
+
+module L20_Crown()
+{
+    translate([(link_w/2) * 1 + link_t * 0.25, (link_l/2) * -1 + link_t * 0.25, 0])
+    translate([((bearing_r)/2 + 3) * 1, ((bearing_r)/2 + 3) * -1, 0])
+    rotate([0, 0, -87.5]){
+        lock_cover();
+        
+    }
+
+    translate([(link_w/2) * -1 + link_t * 0.25, (link_l/2) * 1 + link_t * 0.25, 0])
+    translate([((bearing_r)/2 + 3) * -1, ((bearing_r)/2 + 3) * 1, 0])
+    rotate([0, 0, 87.5]){
+        lock_cover();
+        
+    }
+
+    translate([(link_w/2) * -1 + link_t * 0.25, (link_l/2) * -1 + link_t * 0.25, 0])
+    translate([((bearing_r)/2 + 3.5) * -1, ((bearing_r)/2 + 3.5) * -1, 0])
+    rotate([0, 0, 180]){
+        lock_cover();
+        
+    }
+
+    rotate([0, 0, 180]);
+    translate([(link_w/2) * 1 + link_t * 0.25, (link_l/2) * 1 + link_t * 0.25, 0])
+    translate([((bearing_r)/2 + 2.55) * 1, ((bearing_r)/2 + 2.55) * 1, 0]){
+        lock_cover();
+        
+    }
+
+    rotate([0, 0, 11.25])
+    translate([0, 0, peg_h * 4])
+    difference()
+    {
+        cylinder(r = deck_radius, h = peg_h * 5, center = true, $fn = 16);
+        cylinder(r = deck_radius - peg_h, h = peg_h * 5, center = true, $fn = 16);
+        for(zr = [-7:7])
+        {
+            for(zt = [-2:2])
+            {
+                rotate([0, 0, 22.5 * zr])
+                translate([deck_radius - peg_h * 0.5, 0, zt * peg_h])
+                rotate([0, 90, 0])
+                cylinder_base(peg_r, peg_h * 2, roundness);
+            }
+        }
+    }
+}
+rotate([0, 180, 0])
+translate([0, 0, peg_h * 6.5])
+L20_Crown();
 /*
 translate([0, 0, link_b + link_t * 0.5-peg_h/3-0.1])
     difference(){        
@@ -1533,14 +1614,16 @@ difference(){
 rotate([180, 0, 90])
 translate([0, 0, -(peg_h * 4.5 + link_t + peg_h/2)])
 sensor_mount_deck();
-
-translate([-(parallax_servo_h + link_t * 5 + 0), parallax_wing_l + peg_r, 0])
-rotate([0, -90, 0])
-parallax_servo();
-translate([(parallax_servo_h + link_t * 5 + 0), parallax_wing_l + peg_r, 0])
-rotate([0, 90, 0])
-parallax_servo();
 */
+
+////NBL 15June2020 SERVO standins
+//translate([-(parallax_servo_h + link_t * 5 + 0), parallax_wing_l + peg_r, 0])
+//rotate([0, -90, 0])
+//parallax_servo();
+//translate([(parallax_servo_h + link_t * 5 + 0), parallax_wing_l + peg_r, 0])
+//rotate([0, 90, 0])
+//parallax_servo();
+
 
 
 
